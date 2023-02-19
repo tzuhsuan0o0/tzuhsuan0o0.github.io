@@ -1,13 +1,13 @@
 ---
-usemathjax: true
 layout: post
 title:  "Differential Evolution"
 date:   2023-02-19 10:59:22 +0800
 categories: algorithm
 ---
+{% include math.html %}
 Differential Evolution (DE) [ref.] is a global optimization algorithm over continuous space which can be used for quantum control [ref.]. It consists of three steps in each iteration, mutation, crossover and selection.
 
-First, we create a population for the parameters we want to optimize. An individual in the population is a D-dimensional vector (X_i), i=1,2,3,…,N_"P" , where D is the number of parameters and N_"P"  is the population size. For each iteration, four different individuals X_i,X_s1,X_s2,X_s3 will be sampled randomly from the population.
+First, we create a population for the parameters we want to optimize. An individual in the population is a $$D$$-dimensional vector $$X_{i}$$, $$i=1,2,3,…,N_\text{P}$$, where $$D$$ is the number of parameters and $$N_\text{P}$$ is the population size. For each iteration, four different individuals $$X_{i},X_{s1},X_{s2},X_{s3}$$ will be sampled randomly from the population.
 
 {% highlight python %}
 def createPopulation(param_min, param_max, D, Np):
@@ -17,9 +17,13 @@ def createPopulation(param_min, param_max, D, Np):
 {% endhighlight %}
 
 # Mutation
-The mutant vector V_i is obtained by
-V_i=X_s1+μ(X_s2-X_s3 )
-with μ∈[0,2] the mutation factor which controls the differential variation X_s2-X_s3.
+The mutant vector $$V_{i}$$ is obtained by
+
+$$\begin{equation}
+    V_{i} = X_{s1} + \mu (X_{s2} - X_{s3} )
+\end{equation}$$
+
+with $$\mu \in [0,2]$$ the mutation factor which controls the differential variation $$X_{s2} - X_{s3}$$.
 
 {% highlight python %}
 def mutation(mu=0.5):
@@ -36,9 +40,17 @@ def mutation(mu=0.5):
 {% endhighlight %}
 
 # Crossover
-To increase the diversity of the perturbed parameter vectors, the trail vector U_i is obtained by
-U_i={█(V_i@X_i )┤    (if c(0,1)<ξ,)¦(otherwise,        )
-with c(0,1) the uniform random number between 0 and 1 which is sampled in every iteration, and ξ∈(0,1) the crossover rate.
+To increase the diversity of the perturbed parameter vectors, the trail vector $$U_{i}$$ is obtained by
+
+$$\begin{equation}
+    U_{i} = 
+    \begin{cases}
+        V_{i} & \text{if}\ c(0,1) < \xi,\\
+        X_{i} & \text{otherwise},
+    \end{cases}
+\end{equation}$$
+
+with $$c(0,1)$$ the uniform random number between 0 and 1 which is sampled in every iteration, and $$\xi \in (0,1)$$ the crossover rate.
 
 {% highlight python %}
 def crossover(xi=0.9):
@@ -52,9 +64,17 @@ def crossover(xi=0.9):
 {% endhighlight %}
 
 # Selection
-The member of the next generation X_i^' is chosen by
-X_i^'={█(U_i  @X_i )┤    (if f(U_i )<f(X_i),)¦(otherwise,            )
-where f is the cost function of the optimization problem. For example, if we are trying to optimize a trading strategy, f could be the risk-reward ratio, win rate, etc.
+The member of the next generation $$X'_{i}$$ is chosen by
+
+$$\begin{equation}
+    X'_{i} = 
+    \begin{cases}
+        U_{i} & \text{if}\ f(U_{i}) < f(X_{i}),\\
+        X_{i} & \text{otherwise},
+    \end{cases}
+\end{equation}$$
+
+where $$f$$ is the cost function of the optimization problem. For example, if we are trying to optimize a trading strategy, f could be the risk-reward ratio, win rate, etc.
 
 {% highlight python %}
 def selection(f):
@@ -68,15 +88,8 @@ def selection(f):
         # Start new iteration
 {% endhighlight %}
 
-Jekyll also offers powerful support for code snippets:
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+
 
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
