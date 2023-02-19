@@ -5,7 +5,7 @@ date:   2023-02-19 10:59:22 +0800
 categories: algorithm
 ---
 {% include math.html %}
-Differential Evolution (DE) [ref.] is a global optimization algorithm over continuous space which can be used for quantum control [ref.]. It consists of three steps in each iteration, mutation, crossover and selection.
+Differential Evolution (DE) {% cite Storn1997DifferentialE %} is a global optimization algorithm over continuous space which can be used for quantum control {% cite PhysRevA.90.032310 %}. It consists of three steps in each iteration, mutation, crossover and selection.
 
 First, we create a population for the parameters we want to optimize. An individual in the population is a $$D$$-dimensional vector $$X_{i}$$, $$i=1,2,3,…,N_\text{P}$$, where $$D$$ is the number of parameters and $$N_\text{P}$$ is the population size. For each iteration, four different individuals $$X_{i},X_{s1},X_{s2},X_{s3}$$ will be sampled randomly from the population.
 
@@ -90,9 +90,7 @@ def selection(f):
 
 
 
+References
+----------
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+{% bibliography --cited %}
