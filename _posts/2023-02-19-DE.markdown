@@ -10,9 +10,9 @@ First, we create a population for the parameters we want to optimize. An individ
 
 {% highlight python %}
 def createPopulation(param_min, param_max, D, Np):
-  # param_min and param_max are the lower and upper limit of your parameters
-  population = np.reshape( np.random.uniform(param_min, param_max, D*Np), (Np, D) )
-  return population
+    # param_min and param_max are the lower and upper limit of your parameters
+    population = np.reshape( np.random.uniform(param_min, param_max, D*Np), (Np, D) )
+    return population
 {% endhighlight %}
 
 # Mutation
@@ -20,17 +20,52 @@ The mutant vector V_i is obtained by
 V_i=X_s1+μ(X_s2-X_s3 )
 with μ∈[0,2] the mutation factor which controls the differential variation X_s2-X_s3.
 
+{% highlight python %}
+def mutation(mu=0.5):
+    # Sample four different individuals
+    sampled = np.array(random.sample(range(0, Np), 4))
+    Xi = population[sampled[0]]
+    Xs1 = population[sampled[1]]
+    Xs2 = population[sampled[2]]
+    Xs3 = population[sampled[3]]
+
+    # Generate mutant vector
+    Vi = Xs1 + mu * (Xs2 - Xs3)
+    return Vi
+{% endhighlight %}
+
 # Crossover
 To increase the diversity of the perturbed parameter vectors, the trail vector U_i is obtained by
 U_i={█(V_i@X_i )┤    (if c(0,1)<ξ,)¦(otherwise,        )
 with c(0,1) the uniform random number between 0 and 1 which is sampled in every iteration, and ξ∈(0,1) the crossover rate.
+
+{% highlight python %}
+def crossover(xi=0.9):
+    c = np.random.uniform(0,1)
+    # Generate trail vector
+    if c < xi:
+        Ui = Vi
+    else:
+        Ui = Xi
+        # Start new iteration
+{% endhighlight %}
 
 # Selection
 The member of the next generation X_i^' is chosen by
 X_i^'={█(U_i  @X_i )┤    (if f(U_i )<f(X_i),)¦(otherwise,            )
 where f is the cost function of the optimization problem. For example, if we are trying to optimize a trading strategy, f could be the risk-reward ratio, win rate, etc.
 
-
+{% highlight python %}
+def selection(f):
+    # f is the cost function
+    fu = f(Ui)
+    fx = f(Xi)
+    if fu < fx:
+        # Replace Xi with Ui
+        population[sampled[0]] = Ui
+    else:
+        # Start new iteration
+{% endhighlight %}
 
 Jekyll also offers powerful support for code snippets:
 
